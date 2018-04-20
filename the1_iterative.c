@@ -10,35 +10,44 @@ void printGrid(int grid[100][100], int N) { /* Prints the given grid */
     }
 }
 
-/*3456789012345678901234567890123456789012345678901234567890123456789012345678*/
-
 void merge(int grid[100][100], int carrot[3], int gridSize) {
-    int row = carrot[2], col = carrot[1], mergeCondition = 0;
-    int i;
-    int coordsToMerge[8][2];
+    int row = carrot[2], col = carrot[1], i,
+    int mergeCondition = 0; /* At least 2 same level carrots needed to merge. */
+    int coordsToMerge[8][2];/* Keep record of the merge coordinates. */
 
     while (1){
-        if (col != gridSize-1 && grid[row][col] == grid[row][col+1]) { /* Right */
+        /* Check the right side for a same level carrot */
+        if (col != gridSize-1 && grid[row][col] == grid[row][col+1]) {
+            /* Same level carrot on the right side, update the position */
             coordsToMerge[mergeCondition][0] = row;
             coordsToMerge[mergeCondition][1] = col+1;
-            mergeCondition++;
+            mergeCondition++; /* Found one carrot */
 
-            if (col != gridSize-2 && grid[row][col+1] == grid[row][col+2]) { /* right*/
+            /* Now check if there is another carrot with the same level.
+             * in the adjacent blocks */
+
+            /* Check the right block */
+            if (col != gridSize-2 && grid[row][col+1] == grid[row][col+2]) {
                 coordsToMerge[mergeCondition][0] = row;
                 coordsToMerge[mergeCondition][1] = col+2;
                 mergeCondition++;
             }
-            else if (row != 0 && grid[row][col+1] == grid[row-1][col+1]) { /* up */
+            /* Check the upper block */
+            else if (row != 0 && grid[row][col+1] == grid[row-1][col+1]) {
                 coordsToMerge[mergeCondition][0] = row-1;
                 coordsToMerge[mergeCondition][1] = col+1;
                 mergeCondition++;
             }
-            else if (row != gridSize-1 && grid[row][col+1] == grid[row+1][col+1]) { /* down */
+            /* Check the lower block */
+            else if (row != gridSize-1 && grid[row][col+1] == grid[row+1][col+1]) {
                 coordsToMerge[mergeCondition][0] = row+1;
                 coordsToMerge[mergeCondition][1] = col+1;
                 mergeCondition++;
             }
         }
+
+        /* Same goes for other sides */
+
         if (row != gridSize-1 && grid[row][col] == grid[row+1][col]) { /* Down */
             coordsToMerge[mergeCondition][0] = row+1;
             coordsToMerge[mergeCondition][1] = col;
@@ -102,11 +111,11 @@ void merge(int grid[100][100], int carrot[3], int gridSize) {
             }
         }
 
-        if (mergeCondition >= 2) {
-            for (i = 0; i < mergeCondition; i++)
+        if (mergeCondition >= 2) { /* Merge */
+            for (i = 0; i < mergeCondition; i++) /* Set the coordinates to 0 */
                 grid[coordsToMerge[i][0]][coordsToMerge[i][1]] = 0;
             mergeCondition = 0;
-            grid[row][col] = grid[row][col] + 1;
+            grid[row][col] = grid[row][col] + 1; /* Upgrade the carrot */
             continue;
         }
         break;

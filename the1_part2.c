@@ -3,14 +3,14 @@
 void printGrid(int grid[100][100], int N) { /* Prints the given grid */
     int row, col;
     for (row = 0; row < N; row++) {
-        for (col = 0; col < N; col++) {
+        for (col = 0; col < N; col++)
             printf("%d ", grid[row][col]);
-        }
         printf("\n");
     }
 }
 
 int calculate(int grid[100][100], int n, int row, int col){
+    /* Calculation with Levenshtein algorithm */
     if (row == n && col == n)
         return grid[n-1][n-1];
     else if (col == n)
@@ -25,15 +25,13 @@ int calculate(int grid[100][100], int n, int row, int col){
             }
         }
         else {
-            if (col == 0) {
+            if (col == 0)
                 grid[row][col] += grid[row-1][col];
-            }
             else {
                 if (grid[row-1][col] > grid[row][col-1])
                     grid[row][col] += grid[row-1][col];
                 else
                     grid[row][col] += grid[row][col-1];
-
             }
             return calculate(grid, n, row, col+1);
         }
@@ -47,29 +45,23 @@ void find(int grid[100][100], int n, int row, int col, char path[142], int i){
         find(grid, n, row-1, n-1, path, i);
     else {
         if (row == 0) {
-            /*printf("1");*/
             path[i] = 'E';
             find(grid, n, row, col-1, path, i+1);
         }
         else if (col == 0) {
-            /*printf("2");*/
             path[i] = 'S';
             find(grid, n, row-1, col, path, i+1);
         }
         else {
             if (grid[row-1][col] > grid[row][col-1]) {
-                /*printf("3");*/
                 path[i] = 'S';
                 find(grid, n, row-1, col, path, i+1);
             }
             else {
-                /*printf("4");*/
                 path[i] = 'E';
                 find(grid, n, row, col-1, path, i+1);
             }
         }
-
-
     }
 }
 
